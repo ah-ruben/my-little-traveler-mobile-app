@@ -15,8 +15,9 @@
         android:clickable="true"
         android:contentDescription="@string/fab_transformation_scrim_behavior"
         app:backgroundTint="#6DB770"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_circle_right_24"
         tools:ignore="ImageContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

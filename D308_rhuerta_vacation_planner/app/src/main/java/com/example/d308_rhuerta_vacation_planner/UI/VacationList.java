@@ -14,9 +14,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.d308_rhuerta_vacation_planner.R;
+import com.example.d308_rhuerta_vacation_planner.database.Repository;
+import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
+import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class VacationList extends AppCompatActivity {
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,16 @@ public class VacationList extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.vacation) {
-            Toast.makeText(VacationList.this,"put in sample data", Toast.LENGTH_LONG).show();
+            repository=new Repository(getApplication());
+            //Toast.makeText(VacationList.this,"put in sample data", Toast.LENGTH_LONG).show();
+            Vacation vacation=new Vacation(1,"Italy","Hilton Hotel","04/12/25","05/12/25");
+            repository.insert(vacation);
+            vacation=new Vacation(2,"Spain","Hilton Hotel","06/10/25","07/08/25");
+            repository.insert(vacation);
+            Excursion excursion=new Excursion(1,"Boat Ride","04/13/25", "04/14/25", 1);
+            repository.insert(excursion);
+            excursion=new Excursion(2,"Horse Ride","04/15/25", "04/15/25", 2);
+            repository.insert(excursion);
             return true;
         }
         if(item.getItemId()==android.R.id.home){
