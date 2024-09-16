@@ -8,8 +8,7 @@ public class Excursion {
     @PrimaryKey(autoGenerate = true)
     private int excursionId;
     private String excursionName;
-    private String startDate;
-    private String endDate;
+    private String date;
     private int vacationId;
 
     public int getExcursionId() {
@@ -28,20 +27,12 @@ public class Excursion {
         this.excursionName = excursionName;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getVacationId() {
@@ -52,11 +43,10 @@ public class Excursion {
         this.vacationId = vacationId;
     }
 
-    public Excursion(int excursionId, String excursionName, String startDate, String endDate, int vacationId) {
+    public Excursion(int excursionId, String excursionName, String date, int vacationId) {
         this.excursionId = excursionId;
         this.excursionName = excursionName;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.date = date;
         this.vacationId = vacationId;
     }
 }

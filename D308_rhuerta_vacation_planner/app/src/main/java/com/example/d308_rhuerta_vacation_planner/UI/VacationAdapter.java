@@ -58,7 +58,7 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
             String name = current.getVacationName();
             holder.vacationItemView.setText(current.getVacationName());
         } else {
-            holder.vacationItemView.setText("Vacation Not Found");
+            holder.vacationItemView.setText("Vacation not found!");
         }
     }
 
