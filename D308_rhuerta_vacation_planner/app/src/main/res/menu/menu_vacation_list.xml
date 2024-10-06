@@ -3,6 +3,4 @@
 
     <item android:title="Add Vacation"
         android:id="@+id/add_vacation"/>
-    <item android:title="Add Excursion"
-        android:id="@+id/add_excursion"/>
 </menu>

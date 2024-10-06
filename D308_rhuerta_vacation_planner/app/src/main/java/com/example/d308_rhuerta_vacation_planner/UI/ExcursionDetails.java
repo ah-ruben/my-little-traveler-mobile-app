@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ExcursionDetails extends AppCompatActivity {
@@ -35,10 +37,10 @@ public class ExcursionDetails extends AppCompatActivity {
     String date;
     int excursionId;
     int vacationId;
+    Excursion currentExcursion;
     EditText editExcursionName;
     TextView editDate;
     Repository repository;
-    Button button;
     DatePickerDialog.OnDateSetListener startDate;
     final Calendar myCalendarStart = Calendar.getInstance();
 
@@ -49,7 +51,7 @@ public class ExcursionDetails extends AppCompatActivity {
         repository = new Repository(getApplication());
         editExcursionName = findViewById(R.id.excursion_title);
         editDate = findViewById(R.id.excursion_date_button);
-        excursionName = getIntent().getStringExtra("excursionName");
+        excursionName = getIntent().getStringExtra("name");
         excursionId = getIntent().getIntExtra("excursionId", -1);
         vacationId = getIntent().getIntExtra("vacationId", -1);
         date = getIntent().getStringExtra("date");
@@ -65,9 +67,9 @@ public class ExcursionDetails extends AppCompatActivity {
         for (Vacation vacation : vacationArrayList) {
             vacationIdList.add(vacation.getVacationId());
         }
-        ArrayAdapter<Integer> vacationIdAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, vacationIdList);
+        /*ArrayAdapter<Integer> vacationIdAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, vacationIdList);
         Spinner spinner = findViewById(R.id.spinner);
-        spinner.setAdapter(vacationIdAdapter);
+        spinner.setAdapter(vacationIdAdapter);*/
 
         startDate = new DatePickerDialog.OnDateSetListener() {
 
@@ -121,10 +123,24 @@ public class ExcursionDetails extends AppCompatActivity {
             this.finish();
             return true;
         }
+        if (item.getItemId() == R.id.delete_excursion) {
+            List<Excursion> allExcursions = new ArrayList<>(repository.getmAllExcursions());
+            for (Excursion excursion : allExcursions) {
+                if (excursion.getExcursionId() == excursionId) {
+                    currentExcursion = excursion;
+                    repository.delete(currentExcursion);
+                    Toast.makeText(this, "Excursion was deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Excursion was not deleted", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return true;
+        }
 
         if (item.getItemId() == R.id.save_excursion) {
             Excursion excursion;
-            ;
+            /*if (vacationId == -1)
+                Toast.makeText(ExcursionDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();*/
             if (excursionId == -1) {
                 if (repository.getmAllExcursions().size() == 0)
                     excursionId = 1;
@@ -141,8 +157,8 @@ public class ExcursionDetails extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, editExcursionName.getText().toString());
-            sendIntent.putExtra(Intent.EXTRA_TITLE, "Message Title");
+            sendIntent.putExtra(Intent.EXTRA_TITLE, editExcursionName.getText().toString());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Date: " + editDate.getText().toString());
             sendIntent.setType("text/plain");
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);

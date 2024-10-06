@@ -1,6 +1,9 @@
 package com.example.d308_rhuerta_vacation_planner.UI;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -208,20 +211,15 @@ public class VacationDetails extends AppCompatActivity {
             }
             return true;
         }
-        if(item.getItemId()== R.id.add_excursion){
+        if (item.getItemId()== R.id.save_excursion) {
             if (vacationId == -1)
                 Toast.makeText(VacationDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();
-
             else {
                 int excursionId;
 
                 if (repository.getmAllVacations().size() == 0) excursionId = 1;
                 else
                     excursionId = repository.getmAllExcursions().get(repository.getmAllExcursions().size() - 1).getExcursionId() + 1;
-                Excursion excursion = new Excursion(excursionId, "Beach Trip", "01/01/2025", vacationId);
-                repository.insert(excursion);
-                excursion = new Excursion(++excursionId, "Hike", "01/01/2025", vacationId);
-                repository.insert(excursion);
                 RecyclerView recyclerView = findViewById(R.id.excursion_recycler_view);
                 final ExcursionAdapter excursionAdapter = new ExcursionAdapter(this);
                 recyclerView.setAdapter(excursionAdapter);
@@ -233,6 +231,42 @@ public class VacationDetails extends AppCompatActivity {
                 excursionAdapter.setExcursions(filteredExcursions);
                 return true;
             }
+
+
+            if (item.getItemId() == android.R.id.home) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TITLE, editName.getText().toString());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Vacation Starting\n" + "Start Date: " + editStartDate.getText().toString() + " - End Date: " + editEndDate.getText().toString()
+                                                                + "\nAccommodation: " + editAccommodation.getText().toString());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+                return true;
+            }
+            if (item.getItemId() == R.id.vacation_notify) {
+                String dateFromScreen = editStartDate.getText().toString();
+                String myFormat = "MM/dd/yy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                Date myDate = null;
+                try {
+                    myDate = sdf.parse(dateFromScreen);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Long trigger = myDate.getTime();
+                    Intent intent = new Intent(VacationDetails.this, MyReceiver.class);
+                    intent.putExtra("key", "message I want to see");
+                    PendingIntent sender = PendingIntent.getBroadcast(VacationDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+                } catch (Exception e) {
+
+                }
+                return true;
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -259,6 +293,5 @@ public class VacationDetails extends AppCompatActivity {
         }
         excursionAdapter.setExcursions(filteredExcursions);
     }
-
 
 }
