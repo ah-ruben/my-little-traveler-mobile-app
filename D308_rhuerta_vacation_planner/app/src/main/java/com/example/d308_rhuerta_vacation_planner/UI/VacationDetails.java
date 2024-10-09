@@ -3,9 +3,12 @@ package com.example.d308_rhuerta_vacation_planner.UI;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -235,6 +238,10 @@ public class VacationDetails extends AppCompatActivity {
 
 
         if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        if (item.getItemId() == R.id.share_vacation) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TITLE, editName.getText().toString());
@@ -243,6 +250,7 @@ public class VacationDetails extends AppCompatActivity {
             sendIntent.setType("text/plain");
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);
+            Toast.makeText(this, "Vacation details are ready to share!", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (item.getItemId() == R.id.vacation_notify) {

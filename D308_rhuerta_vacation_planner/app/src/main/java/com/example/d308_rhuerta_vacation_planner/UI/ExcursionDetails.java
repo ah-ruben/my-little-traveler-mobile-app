@@ -158,7 +158,7 @@ public class ExcursionDetails extends AppCompatActivity {
             }
             return true;
         }
-        if (item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == R.id.share_excursion) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TITLE, editExcursionName.getText().toString());
@@ -166,6 +166,7 @@ public class ExcursionDetails extends AppCompatActivity {
             sendIntent.setType("text/plain");
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);
+            Toast.makeText(this, "Excursion details are ready to share!", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (item.getItemId() == R.id.excursion_notify) {
