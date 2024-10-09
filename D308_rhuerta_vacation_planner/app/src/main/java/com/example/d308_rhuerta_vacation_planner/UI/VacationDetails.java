@@ -140,6 +140,7 @@ public class VacationDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(VacationDetails.this, ExcursionDetails.class);
+                intent.putExtra("vid", vacationId);
                 startActivity(intent);
             }
 
@@ -216,7 +217,6 @@ public class VacationDetails extends AppCompatActivity {
                 Toast.makeText(VacationDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();
             else {
                 int excursionId;
-
                 if (repository.getmAllVacations().size() == 0) excursionId = 1;
                 else
                     excursionId = repository.getmAllExcursions().get(repository.getmAllExcursions().size() - 1).getExcursionId() + 1;
@@ -231,40 +231,58 @@ public class VacationDetails extends AppCompatActivity {
                 excursionAdapter.setExcursions(filteredExcursions);
                 return true;
             }
+        }
 
 
-            if (item.getItemId() == android.R.id.home) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TITLE, editName.getText().toString());
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Vacation Starting\n" + "Start Date: " + editStartDate.getText().toString() + " - End Date: " + editEndDate.getText().toString()
-                                                                + "\nAccommodation: " + editAccommodation.getText().toString());
-                sendIntent.setType("text/plain");
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TITLE, editName.getText().toString());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Vacation Starting\n" + "Start Date: " + editStartDate.getText().toString() + " - End Date: " + editEndDate.getText().toString()
+                                                    + "\nAccommodation: " + editAccommodation.getText().toString());
+            sendIntent.setType("text/plain");
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+            return true;
+        }
+        if (item.getItemId() == R.id.vacation_notify) {
+            String dateFromScreen = editStartDate.getText().toString();
+            String myFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            Date myDate = null;
+            try {
+                myDate = sdf.parse(dateFromScreen);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            if (item.getItemId() == R.id.vacation_notify) {
-                String dateFromScreen = editStartDate.getText().toString();
-                String myFormat = "MM/dd/yy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                Date myDate = null;
-                try {
-                    myDate = sdf.parse(dateFromScreen);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Long trigger = myDate.getTime();
-                    Intent intent = new Intent(VacationDetails.this, MyReceiver.class);
-                    intent.putExtra("key", "message I want to see");
-                    PendingIntent sender = PendingIntent.getBroadcast(VacationDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
-                } catch (Exception e) {
-
-                }
-                return true;
+            try {
+                Long trigger = myDate.getTime();
+                Intent intent = new Intent(VacationDetails.this, MyReceiver.class);
+                intent.putExtra("key", "Your vacation " + editName.getText().toString() + " is starting!");
+                PendingIntent sender = PendingIntent.getBroadcast(VacationDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String dateFromScreen2 = editEndDate.getText().toString();
+            String myFormat2 = "MM/dd/yy";
+            SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat, Locale.US);
+            Date myDate2 = null;
+            try {
+                myDate2 = sdf.parse(dateFromScreen);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                long trigger = myDate2.getTime();
+                Intent intent = new Intent(VacationDetails.this, MyReceiver.class);
+                intent.putExtra("key", "Your vacation " + editName.getText().toString() + " is ending!");
+                PendingIntent sender = PendingIntent.getBroadcast(VacationDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return true;
         }

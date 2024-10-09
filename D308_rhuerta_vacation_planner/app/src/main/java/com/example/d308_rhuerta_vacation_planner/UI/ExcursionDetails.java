@@ -52,8 +52,8 @@ public class ExcursionDetails extends AppCompatActivity {
         editExcursionName = findViewById(R.id.excursion_title);
         editDate = findViewById(R.id.excursion_date_button);
         excursionName = getIntent().getStringExtra("name");
-        excursionId = getIntent().getIntExtra("excursionId", -1);
-        vacationId = getIntent().getIntExtra("vacationId", -1);
+        excursionId = getIntent().getIntExtra("eid", -1);
+        vacationId = getIntent().getIntExtra("vid", -1);
         date = getIntent().getStringExtra("date");
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -91,7 +91,7 @@ public class ExcursionDetails extends AppCompatActivity {
             public void onClick(View v) {
                 Date date;
                 String info = editDate.getText().toString();
-                if (info.equals("")) info = "09/15/24";
+                if (info.equals("")) info = "01/01/25";
                 try {
                     myCalendarStart.setTime(sdf.parse(info));
                 } catch (ParseException e) {
@@ -125,22 +125,26 @@ public class ExcursionDetails extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.delete_excursion) {
             List<Excursion> allExcursions = new ArrayList<>(repository.getmAllExcursions());
+            boolean flag=false;
             for (Excursion excursion : allExcursions) {
                 if (excursion.getExcursionId() == excursionId) {
                     currentExcursion = excursion;
                     repository.delete(currentExcursion);
                     Toast.makeText(this, "Excursion was deleted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Excursion was not deleted", Toast.LENGTH_SHORT).show();
+                    flag = true;
+                    break;
                 }
             }
+            if (!flag)
+                Toast.makeText(this, "Excursion was not deleted", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (item.getItemId() == R.id.save_excursion) {
             Excursion excursion;
-            /*if (vacationId == -1)
-                Toast.makeText(ExcursionDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();*/
+            if (vacationId == -1)
+                Toast.makeText(ExcursionDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();
+            //else
             if (excursionId == -1) {
                 if (repository.getmAllExcursions().size() == 0)
                     excursionId = 1;
@@ -177,7 +181,7 @@ public class ExcursionDetails extends AppCompatActivity {
             try {
                 Long trigger = myDate.getTime();
                 Intent intent = new Intent(ExcursionDetails.this, MyReceiver.class);
-                intent.putExtra("key", "message I want to see");
+                intent.putExtra("key", "Your excursion " + editExcursionName.getText().toString() + " is coming up!");
                 PendingIntent sender = PendingIntent.getBroadcast(ExcursionDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
