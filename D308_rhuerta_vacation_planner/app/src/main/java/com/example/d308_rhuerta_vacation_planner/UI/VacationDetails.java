@@ -182,16 +182,47 @@ public class VacationDetails extends AppCompatActivity {
         if (item.getItemId() == R.id.save_vacation) {
             Vacation vacation;
             if (vacationId == -1) {
-                if (repository.getmAllVacations().size() == 0) vacationId = 1;
-                else
+                if (repository.getmAllVacations().size() == 0) {
+                    vacationId = 1;
+                } else {
                     vacationId = repository.getmAllVacations().get(repository.getmAllVacations().size() - 1).getVacationId() + 1;
-                vacation = new Vacation(vacationId, editName.getText().toString(), editAccommodation.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString());
-                repository.insert(vacation);
-                this.finish();
+                    vacation = new Vacation(vacationId, editName.getText().toString(), editAccommodation.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString());
+
+                    String dateFormat = "MM/dd/yy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+                    try {
+                        Date start = sdf.parse(vacation.getStartDate());
+                        Date end = sdf.parse(vacation.getEndDate());
+                        if (end.before(start)) {
+                            Toast.makeText(VacationDetails.this, "Uh Oh! Your vacation should start before it ends!", Toast.LENGTH_LONG).show();
+                            return false;
+                        } else {
+                            Toast.makeText(VacationDetails.this, "Vacation saved!", Toast.LENGTH_LONG).show();
+                            repository.insert(vacation);
+                            this.finish();
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 try {
                     vacation = new Vacation(vacationId, editName.getText().toString(), editAccommodation.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString());
-                    repository.update(vacation);
+                    String dateFormat = "MM/dd/yy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+                    try {
+                        Date start = sdf.parse(vacation.getStartDate());
+                        Date end = sdf.parse(vacation.getEndDate());
+                        if (end.before(start)) {
+                            Toast.makeText(VacationDetails.this, "Oops! Your vacation should start before it ends!", Toast.LENGTH_LONG).show();
+                            return false;
+                        } else {
+                            Toast.makeText(VacationDetails.this, "Vacation updated!", Toast.LENGTH_LONG).show();
+                            repository.insert(vacation);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

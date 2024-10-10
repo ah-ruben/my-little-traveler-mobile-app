@@ -144,7 +144,6 @@ public class ExcursionDetails extends AppCompatActivity {
             Excursion excursion;
             if (vacationId == -1)
                 Toast.makeText(ExcursionDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();
-            //else
             if (excursionId == -1) {
                 if (repository.getmAllExcursions().size() == 0)
                     excursionId = 1;
