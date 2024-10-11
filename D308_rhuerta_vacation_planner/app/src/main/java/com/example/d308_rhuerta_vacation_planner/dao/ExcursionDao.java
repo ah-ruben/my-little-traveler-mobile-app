@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
+import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface ExcursionDao {
 
     @Query("SELECT * FROM excursions ORDER BY excursionId ASC")
     List<Excursion> getAllExcursions();
+
     @Query("SELECT * FROM excursions WHERE vacationId=:vacId ORDER BY excursionId ASC")
     List<Excursion> getAssociatedExcursions(int vacId);
 }

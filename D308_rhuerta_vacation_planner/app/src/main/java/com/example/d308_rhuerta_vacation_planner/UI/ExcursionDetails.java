@@ -142,21 +142,64 @@ public class ExcursionDetails extends AppCompatActivity {
 
         if (item.getItemId() == R.id.save_excursion) {
             Excursion excursion;
-            if (vacationId == -1)
+            Vacation vacation = null;
+
+            if (vacationId == -1) {
                 Toast.makeText(ExcursionDetails.this, "Please save vacation before adding excursions", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            List<Vacation> allVacations = repository.getmAllVacations();
+            for (Vacation vac : allVacations) {
+                if (vac.getVacationId() == vacationId) {
+                    vacation = vac;
+                    break;
+                }
+            }
+
+            String dateFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+            Date startDate = null;
+            Date endDate = null;
+            try {
+                startDate = sdf.parse(vacation.getStartDate());
+                endDate = sdf.parse(vacation.getEndDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+            Date excursionDate = null;
+            try {
+                excursionDate = sdf.parse(editDate.getText().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            if (excursionDate.before(startDate) || excursionDate.after(endDate)) {
+                Toast.makeText(ExcursionDetails.this, "Oops! Your excursion must be during your vacation!", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
             if (excursionId == -1) {
-                if (repository.getmAllExcursions().size() == 0)
+                if (repository.getmAllExcursions().size() == 0) {
                     excursionId = 1;
-                else
+                } else {
                     excursionId = repository.getmAllExcursions().get(repository.getmAllExcursions().size() - 1).getExcursionId() + 1;
+                }
+
                 excursion = new Excursion(excursionId, editExcursionName.getText().toString(), editDate.getText().toString(), vacationId);
                 repository.insert(excursion);
-            } else {
+                Toast.makeText(ExcursionDetails.this, "Excursion created!", Toast.LENGTH_LONG).show();
+            }
+            else {
                 excursion = new Excursion(excursionId, editExcursionName.getText().toString(), editDate.getText().toString(), vacationId);
                 repository.update(excursion);
+                Toast.makeText(ExcursionDetails.this, "Excursion updated!", Toast.LENGTH_LONG).show();
             }
+            this.finish();
             return true;
         }
+
         if (item.getItemId() == R.id.share_excursion) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
