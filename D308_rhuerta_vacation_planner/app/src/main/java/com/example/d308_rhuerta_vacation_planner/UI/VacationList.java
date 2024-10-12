@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,7 +64,9 @@ public class VacationList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.add_vacation) {
             repository=new Repository(getApplication());
-            //Toast.makeText(VacationList.this,"put in sample data", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(VacationList.this, VacationDetails.class);
+            startActivity(intent);
+            /*Toast.makeText(VacationList.this,"put in sample data", Toast.LENGTH_LONG).show();
             Vacation vacation=new Vacation(1,"Italy","Hilton Hotel","04/12/25","05/12/25");
             repository.insert(vacation);
             vacation=new Vacation(2,"Spain","Hilton Hotel","06/10/25","07/08/25");
@@ -71,7 +74,7 @@ public class VacationList extends AppCompatActivity {
             Excursion excursion=new Excursion(1,"Boat Ride", "06/10/25", 1);
             repository.insert(excursion);
             excursion=new Excursion(2,"Horse Ride", "06/10/25", 2);
-            repository.insert(excursion);
+            repository.insert(excursion);*/
             return true;
         }
         if(item.getItemId()==android.R.id.home){
