@@ -25,4 +25,7 @@ public interface VacationDao {
 
     @Query("SELECT * FROM vacations ORDER BY vacationId ASC")
     List<Vacation> getAllVacations();
+
+    @Query("SELECT * FROM vacations WHERE vacationName LIKE :searchQuery OR accommodation LIKE :searchQuery ORDER BY vacationId ASC")
+    List<Vacation> searchVacations(String searchQuery);
 }

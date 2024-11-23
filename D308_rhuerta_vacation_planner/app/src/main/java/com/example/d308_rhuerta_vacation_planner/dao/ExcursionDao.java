@@ -8,7 +8,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
-import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
 
 import java.util.List;
 

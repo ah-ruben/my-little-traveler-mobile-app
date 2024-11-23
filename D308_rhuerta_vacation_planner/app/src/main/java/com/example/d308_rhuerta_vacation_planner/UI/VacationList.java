@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import androidx.appcompat.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.d308_rhuerta_vacation_planner.R;
 import com.example.d308_rhuerta_vacation_planner.database.Repository;
-import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
 import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VacationList extends AppCompatActivity {
@@ -51,12 +51,28 @@ public class VacationList extends AppCompatActivity {
         recyclerView.setAdapter(vacationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         vacationAdapter.setVacations(allVacations);
-        //System.out.println(getIntent().getStringExtra("test"));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_vacation_list, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterVacations(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterVacations(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -81,7 +97,7 @@ public class VacationList extends AppCompatActivity {
             this.finish();
             return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -89,9 +105,22 @@ public class VacationList extends AppCompatActivity {
         super.onResume();
         List<Vacation> allVacations = repository.getmAllVacations();
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        final VacationAdapter vacationAdapter = new VacationAdapter(this);
+        VacationAdapter vacationAdapter = new VacationAdapter(this);
         recyclerView.setAdapter(vacationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         vacationAdapter.setVacations(allVacations);
+    }
+
+    private void filterVacations(String query) {
+        List<Vacation> allVacations = repository.getmAllVacations();
+        List<Vacation> filteredVacations = new ArrayList<>();
+        final VacationAdapter vacationAdapter = new VacationAdapter(this);
+        for (Vacation vacation : allVacations) {
+            if (vacation.getVacationName().toLowerCase().contains(query.toLowerCase()) ||
+                    vacation.getAccommodation().toLowerCase().contains(query.toLowerCase())) {
+                filteredVacations.add(vacation);
+            }
+        }
+        vacationAdapter.setVacations(filteredVacations);
     }
 }
