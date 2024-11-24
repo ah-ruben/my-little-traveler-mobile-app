@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
@@ -78,8 +80,8 @@ public class VacationList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.add_vacation) {
-            repository=new Repository(getApplication());
+        if (item.getItemId() == R.id.add_vacation) {
+            repository = new Repository(getApplication());
             Intent intent = new Intent(VacationList.this, VacationDetails.class);
             startActivity(intent);
             /*Toast.makeText(VacationList.this,"put in sample data", Toast.LENGTH_LONG).show();
@@ -93,7 +95,7 @@ public class VacationList extends AppCompatActivity {
             repository.insert(excursion);*/
             return true;
         }
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
         }
@@ -112,15 +114,21 @@ public class VacationList extends AppCompatActivity {
     }
 
     private void filterVacations(String query) {
-        List<Vacation> allVacations = repository.getmAllVacations();
-        List<Vacation> filteredVacations = new ArrayList<>();
-        final VacationAdapter vacationAdapter = new VacationAdapter(this);
-        for (Vacation vacation : allVacations) {
-            if (vacation.getVacationName().toLowerCase().contains(query.toLowerCase()) ||
-                    vacation.getAccommodation().toLowerCase().contains(query.toLowerCase())) {
-                filteredVacations.add(vacation);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        VacationAdapter vacationAdapter = (VacationAdapter) recyclerView.getAdapter();
+        if (vacationAdapter != null) {
+            List<Vacation> allVacations = repository.getmAllVacations();
+            List<Vacation> filteredVacations = new ArrayList<>();
+            for (Vacation vacation : allVacations) {
+                if (vacation.getVacationName().toLowerCase().contains(query.toLowerCase()) ||
+                        vacation.getAccommodation().toLowerCase().contains(query.toLowerCase())) {
+                    filteredVacations.add(vacation);
+                }
+            }
+            vacationAdapter.setVacations(filteredVacations);
+            if (filteredVacations.isEmpty()) {
+                Toast.makeText(this, "No vacation matching your search.", Toast.LENGTH_SHORT).show();
             }
         }
-        vacationAdapter.setVacations(filteredVacations);
     }
 }
