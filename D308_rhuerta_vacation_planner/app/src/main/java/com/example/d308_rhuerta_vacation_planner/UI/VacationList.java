@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.d308_rhuerta_vacation_planner.R;
 import com.example.d308_rhuerta_vacation_planner.database.Repository;
+import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
 import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -53,6 +54,8 @@ public class VacationList extends AppCompatActivity {
         recyclerView.setAdapter(vacationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         vacationAdapter.setVacations(allVacations);
+
+
     }
 
     @Override
@@ -80,6 +83,10 @@ public class VacationList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.generate_report) {
+            generateReport();
+            return true;
+        }
         if (item.getItemId() == R.id.add_vacation) {
             repository = new Repository(getApplication());
             Intent intent = new Intent(VacationList.this, VacationDetails.class);
@@ -129,6 +136,17 @@ public class VacationList extends AppCompatActivity {
             if (filteredVacations.isEmpty()) {
                 Toast.makeText(this, "No vacation matching your search.", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    private void generateReport() {
+        List<Vacation> allVacations = repository.getmAllVacations();
+        List<Excursion> allExcursions = repository.getmAllExcursions();
+
+        String filePath = ReportGenerator.generateReport(this, allVacations, allExcursions);
+        if (filePath != null) {
+            Toast.makeText(this, "Report saved: " + filePath, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Error generating report", Toast.LENGTH_SHORT).show();
         }
     }
 }

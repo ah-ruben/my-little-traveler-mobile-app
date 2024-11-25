@@ -9,4 +9,6 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
     <item android:title="Add Vacation"
         android:id="@+id/add_vacation"/>
+    <item android:title="Generate Report"
+        android:id="@+id/generate_report"/>
 </menu>
