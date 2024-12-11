@@ -95,7 +95,7 @@ public class VacationDetails extends AppCompatActivity {
             public void onClick(View v) {
                 Date date;
                 String info = editStartDate.getText().toString();
-                if (info.equals("")) info = "09/15/24";
+                if (info.equals("")) info = "01/01/25";
                 try {
                     myCalendarStart.setTime(sdf.parse(info));
                 } catch (ParseException e) {
@@ -122,7 +122,7 @@ public class VacationDetails extends AppCompatActivity {
             public void onClick(View v) {
                 Date date;
                 String info = editEndDate.getText().toString();
-                if (info.equals("")) info = "09/15/24";
+                if (info.equals("")) info = "01/01/25";
                 try {
                     myCalendarEnd.setTime(sdf.parse(info));
                 } catch (ParseException e) {
@@ -176,7 +176,7 @@ public class VacationDetails extends AppCompatActivity {
         if(item.getItemId()== android.R.id.home){
             this.finish();
             return true;}
-        if (item.getItemId() == R.id.save_vacation) {
+        /*if (item.getItemId() == R.id.save_vacation) {
             Vacation vacation;
             if (vacationId == -1) {
                 if (repository.getmAllVacations().size() == 0) {
@@ -215,7 +215,8 @@ public class VacationDetails extends AppCompatActivity {
                             return false;
                         } else {
                             Toast.makeText(VacationDetails.this, "Vacation updated!", Toast.LENGTH_LONG).show();
-                            repository.insert(vacation);
+                            repository.update(vacation);
+                            this.finish();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -224,6 +225,45 @@ public class VacationDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            return true;
+        }*/
+        if (item.getItemId() == R.id.save_vacation) {
+            Vacation vacation;
+
+            String vacationName = editName.getText().toString();
+            String accommodation = editAccommodation.getText().toString();
+            String startDate = editStartDate.getText().toString();
+            String endDate = editEndDate.getText().toString();
+
+            String dateFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
+
+            try {
+                Date start = sdf.parse(startDate);
+                Date end = sdf.parse(endDate);
+
+                if (end.before(start)) {
+                    Toast.makeText(this, "Oops! Your vacation should start before it ends!", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                if (vacationId == -1) {
+                    vacationId = repository.getmAllVacations().isEmpty() ? 1
+                            : repository.getmAllVacations().get(repository.getmAllVacations().size() - 1).getVacationId() + 1;
+
+                    vacation = new Vacation(vacationId, vacationName, accommodation, startDate, endDate);
+                    repository.insert(vacation);
+                    Toast.makeText(this, "Vacation saved!", Toast.LENGTH_LONG).show();
+                } else {
+                    vacation = new Vacation(vacationId, vacationName, accommodation, startDate, endDate);
+                    repository.update(vacation);
+                    Toast.makeText(this, "Vacation updated!", Toast.LENGTH_LONG).show();
+                }
+
+                this.finish();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             return true;
         }
         if(item.getItemId()== R.id.delete_vacation) {
@@ -306,7 +346,7 @@ public class VacationDetails extends AppCompatActivity {
             SimpleDateFormat sdf2 = new SimpleDateFormat(myFormat, Locale.US);
             Date myDate2 = null;
             try {
-                myDate2 = sdf.parse(dateFromScreen);
+                myDate2 = sdf.parse(dateFromScreen2);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
