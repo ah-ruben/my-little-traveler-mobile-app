@@ -1,9 +1,9 @@
-package com.example.d308_rhuerta_vacation_planner;
+package com.example.my_little_traveler;
 
 
 import static org.junit.Assert.assertEquals;
 
-import com.example.d308_rhuerta_vacation_planner.entities.Vacation;
+import com.application.my_little_traveler.entities.Vacation;
 
 import org.junit.Before;
 import org.junit.Test;

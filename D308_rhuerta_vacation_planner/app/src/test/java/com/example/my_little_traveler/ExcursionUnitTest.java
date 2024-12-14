@@ -1,11 +1,11 @@
-package com.example.d308_rhuerta_vacation_planner;
+package com.example.my_little_traveler;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.example.d308_rhuerta_vacation_planner.entities.Excursion;
+import com.application.my_little_traveler.entities.Excursion;
 
 
 public class ExcursionUnitTest {

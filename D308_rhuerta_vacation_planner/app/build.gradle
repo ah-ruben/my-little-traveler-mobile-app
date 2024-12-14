@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.d308_rhuerta_vacation_planner'
+    namespace 'com.application.my_little_traveler'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.example.d308_rhuerta_vacation_planner'
+        applicationId 'com.application.my_little_traveler'
         minSdk 26
         targetSdk 34
         versionCode 1
