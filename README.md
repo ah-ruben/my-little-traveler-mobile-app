@@ -1,28 +1,25 @@
-<strong> **DO NOT DISTRIBUTE OR PUBLICLY POST SOLUTIONS TO THESE LABS. MAKE ALL FORKS OF THIS REPOSITORY WITH SOLUTION CODE PRIVATE. PLEASE REFER TO THE STUDENT CODE OF CONDUCT AND ETHICAL EXPECTATIONS FOR COLLEGE OF INFORMATION TECHNOLOGY STUDENTS FOR SPECIFICS. ** </strong>
+# Application Name - My Little Traveler
+The purpose of this application is to allow users to keep track of and plan their vacations and any associated excursions during 
+their vacation time. The user will be able to add as many vacations and excursions as they'd like. 
 
-# WESTERN GOVERNORS UNIVERSITY 
-## D308 – MOBILE APPLICATION DEVELOPMENT (ANDROID)
-Welcome to Mobile Application Development (Android)! This is an opportunity for students to create page layouts with clean navigation, design mobile application infrastructure and user interfaces, develop secure database-backed mobile applications in an object-oriented language, document solutions for application requirements with storyboards and emulators, articulate challenges in the development process, and describe alternatives methods in overcoming mobile application development problems. 
+## App Use
+When the application is opened, you are presented with the home screen where you have the option to hit 'Enter' to begin. Upon
+choosing to enter, you will be shown an empty list where vacations will be saved to. In order to create a vacation, there are
+two options - the first is to click the bottom right arrow to go to the next screen, the second is to hit the top left menu and 
+click 'Add Vacation'. These actions will both take you to the activity to add a vacation with a title, accommodation, and start and 
+end dates. To successfully add an excursion to a vacation, you must save the vacation using the top right menu option and selecting
+'Save Vacation', under the same menu there is an option to delete, share, and notify yourself about a vacation when its starting and
+when its ending. In the vacation and excursion details, there is a '+' button to associate a new excursion to the vacation. Similar
+to vacations, the excursion details menu allows you to save the excursion title and date of the excursion. To save an excursion,
+you can click the top right menu and click 'Save Excursion', the same menu will also provide options to delete, share, and notify
+you when they excursion is starting. Navigating back to the vacation details screen with the back arrow at the top left, you will 
+now see an excursion associated to your vacation if one was saved. Hitting the back arrow again, you will see a vacation on your 
+vacation list screen. 
 
-FOR SPECIFIC TASK INSTRUCTIONS AND REQUIREMENTS FOR THIS ASSESSMENT, PLEASE REFER TO THE COURSE PAGE.
-## BASIC INSTRUCTIONS
-For this assessment, you have an opportunity to test your competency as a mobile application developer. Your understanding of mobile application structure and design will help you to develop applications to meet customer requirements. This task will allow you to demonstrate your ability to apply the skills learned in the course.
+## Android Version
+Minimum Version - API level 26 (Android 8.0 Oreo)
+Optimized Version - API level 34 (Android 14)
 
-## SUPPLEMENTAL RESOURCES 
-1.	How to clone a project to Android Studio using Git?
-
-> Ensure that Android Studio and Git are installed on your system.  New Project, Get from VCS button or the File/New/Project from Version Control. This will open a window  with a prompt to clone the project. Save it in a safe location for the directory and press clone. IntelliJ will prompt you for your credentials. Enter in your WGU Credentials and the project will be cloned onto your local machine.
-
-2. How to create a branch and start Development?
-
-- GitLab method
-> Press the '+' button located near your branch name. In the dropdown list, press the 'New branch' button. This will allow you to create a name for your branch. Once the branch has been named, you can select 'Create Branch' to push the branch to your repository.
-
-- Android Studio method
-> In Android Studio, Go to the 'Git' button on the top toolbar. Select the new branch option and create a name for the branch. Make sure checkout branch is selected and press create. You can now add a commit message and push the new branch to the local repo.
-
-## SUPPORT
-If you need additional support, please navigate to the course page and reach out to your course instructor.
-## FUTURE USE
-Take this opportunity to create or add to a simple resume portfolio to highlight and showcase your work for future use in career search, experience, and education!
+### Git Repository
+https://gitlab.com/wgu-gitlab-environment/student-repos/rhuert5/d308-mobile-application-development-android/-/tree/working_branch?ref_type=heads
 
